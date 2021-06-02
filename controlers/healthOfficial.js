@@ -105,17 +105,11 @@ const update = (req, res) => {
 const sendVerificationCode = (req, res) => {
     models.HealthOfficial.findOne({ where: { email: req.body.email } })
     try {
-        sendMail(req.body.email)
+        sendMail(req.body.email, res)
         const updateHealthOfficial = {
             verificationCode: code
         }
         models.HealthOfficial.update(updateHealthOfficial, { where: { email: req.body.email } })
-            .then(
-                res.status(200).json("Verification Code Sent")
-            )
-            .catch((err) => {
-                res.status(500).json("Server Error" + err)
-            })
     }
     catch {
         (err) => {
@@ -166,15 +160,12 @@ const registerHealthOfficial = (req, res) => {
                             })
                         }
                         else {
-                            sendMail(req.body.newOfficialEmail)
+                            sendMail(req.body.newOfficialEmail, res)
                             const newHealthOfficial = {
                                 email: req.body.newOfficialEmail,
                                 verificationCode: code
                             }
                             models.HealthOfficial.create(newHealthOfficial)
-                            res.status(200).json({
-                                message: "Verification Code sent"
-                            })
                         }
                     })
             }

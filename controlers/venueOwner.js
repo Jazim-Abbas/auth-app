@@ -155,17 +155,11 @@ const update = (req, res) => {
 const sendVerificationCode = (req, res) => {
   models.VenueOwner.findOne({ where: { email: req.body.email } })
   try {
-    sendMail(req.body.email)
+    sendMail(req.body.email, res)
     const updateVenueOwner = {
       verificationCode: code
     }
     models.VenueOwner.update(updateVenueOwner, { where: { email: req.body.email } })
-      .then(
-        res.status(200).json("Verification Code Sent")
-      )
-      .catch((err) => {
-        res.status(500).json("Server Error" + err)
-      })
   }
   catch {
     (err) => {

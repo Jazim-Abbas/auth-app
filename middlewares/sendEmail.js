@@ -32,15 +32,15 @@ function getMailOptions() {
 }
 
 // Step 3
-function sendMail(email) {
+function sendMail(email, res) {
     const mailOpts = getMailOptions();
 
     return transporter.sendMail({ ...mailOpts, to: email }, (err, data) => {
         if (err) {
-            return console.log('Error occurs' + err);
+            res.status(500).json("Server Error" + err)
         }
         else {
-            return console.log('Email sent!!!');
+            res.status(200).json("Verification Code Sent")
         }
 
     });
