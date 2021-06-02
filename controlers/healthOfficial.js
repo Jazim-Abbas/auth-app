@@ -146,12 +146,11 @@ const forgetPassword = (req, res) => {
 }
 
 const registerHealthOfficial = (req, res) => {
-
-    models.HealthOfficial.findOne({ where: { email: req.body.registeredOfficialEmail } })
+    models.HealthOfficial.findOne({ where: { email: req.user.email } })
         .then(result => {
             console.log(result.email);
             if (result) {
-                models.HealthOfficial.findOne({ where: { email: req.body.newOfficialEmail } })
+                models.HealthOfficial.findOne({ where: { email: req.body.email } })
                     .then(result => {
                         if (result) {
                             result.email
@@ -160,9 +159,9 @@ const registerHealthOfficial = (req, res) => {
                             })
                         }
                         else {
-                            sendMail(req.body.newOfficialEmail, res)
+                            sendMail(req.body.email, res)
                             const newHealthOfficial = {
-                                email: req.body.newOfficialEmail,
+                                email: req.body.email,
                                 verificationCode: code
                             }
                             models.HealthOfficial.create(newHealthOfficial)

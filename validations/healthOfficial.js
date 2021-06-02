@@ -13,8 +13,7 @@ const forgetPasswordSchema = yup.object({
 })
 
 const registerSchema = yup.object({
-    registeredOfficialEmail: yup.string().email().required(),
-    newOfficialEmail: yup.string().email().required()
+    email: yup.string().email().required()
 })
 
 const newOfficialSchema = yup.object({
