@@ -181,11 +181,11 @@ const forgetPassword = (req, res) => {
   models.User.findOne({ where: { email: req.body.email } })
     .then((result) => {
       if (result.verificationCode == req.body.verificationCode) {
-        const hash = bcrypt.hashSync(req.body.password, 10);
-        const updatePassword = {
-          password: hash
-        }
         if (req.body.password === req.body.confirmPassword) {
+          const hash = bcrypt.hashSync(req.body.password, 10);
+          const updatePassword = {
+            password: hash
+          }
           models.User.update(updatePassword, { where: { email: result.email } })
             .then(
               res.status(200).json("Successfully Updated Password")

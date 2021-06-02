@@ -4,47 +4,6 @@ const jwt = require("jsonwebtoken")
 const env = require("dotenv").config()
 const { sendMail, code } = require("../middlewares/sendEmail")
 
-const register = (req, res) => {
-    const body = req.body
-    const hash = bcrypt.hashSync(body.password, 10);
-
-    models.HealthOfficial.findOne({ where: { email: body.email } })
-        .then(result => {
-            if (result) {
-                res.status(500).json({
-                    message: "Email Exists"
-                })
-            }
-            else {
-                if (body.password === body.confirmPassword) {
-                    const newHealthOfficial = {
-                        name: body.name,
-                        email: body.email,
-                        password: hash,
-                        familyName: body.familyName,
-                        phone: body.phone
-                    }
-                    models.HealthOfficial.create(newHealthOfficial)
-                    res.status(200).json({
-                        message: "Successfully Registered"
-                    })
-                }
-                else {
-                    res.status(500).json({
-                        message: "Both Password don't matches"
-                    })
-                }
-
-            }
-
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: "Something went wrong"
-            })
-        })
-}
-
 const login = (req, res) => {
     const body = req.body
 
@@ -169,11 +128,11 @@ const forgetPassword = (req, res) => {
     models.HealthOfficial.findOne({ where: { email: req.body.email } })
         .then((result) => {
             if (result.verificationCode == req.body.verificationCode) {
-                const hash = bcrypt.hashSync(req.body.password, 10);
-                const updatePassword = {
-                    password: hash
-                }
-                if(req.body.password === req.body.confirmPassword) {
+                if (req.body.password === req.body.confirmPassword) {
+                    const hash = bcrypt.hashSync(req.body.password, 10);
+                    const updatePassword = {
+                        password: hash
+                    }
                     models.HealthOfficial.update(updatePassword, { where: { email: result.email } })
                         .then(
                             res.status(200).json("Successfully Updated Password")
@@ -192,11 +151,85 @@ const forgetPassword = (req, res) => {
         })
 }
 
+const registerHealthOfficial = (req, res) => {
+
+    models.HealthOfficial.findOne({ where: { email: req.body.registeredOfficialEmail } })
+        .then(result => {
+            console.log(result.email);
+            if (result) {
+                models.HealthOfficial.findOne({ where: { email: req.body.newOfficialEmail } })
+                    .then(result => {
+                        if (result) {
+                            result.email
+                            res.status(500).json({
+                                message: "Email Exists",
+                            })
+                        }
+                        else {
+                            sendMail(req.body.newOfficialEmail)
+                            const newHealthOfficial = {
+                                email: req.body.newOfficialEmail,
+                                verificationCode: code
+                            }
+                            models.HealthOfficial.create(newHealthOfficial)
+                            res.status(200).json({
+                                message: "Verification Code sent"
+                            })
+                        }
+                    })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "First register health officil by admin"
+            })
+        })
+}
+
+const verifyHealthOfficial = (req, res) => {
+    models.HealthOfficial.findOne({ where: { email: req.body.newOfficialEmail } })
+        .then(result => {
+            if (result.verificationCode == req.body.verificationCode) {
+                if (req.body.password === req.body.confirmPassword) {
+                    const hash = bcrypt.hashSync(req.body.password, 10);
+                    const newHealthOfficial = {
+                        name: req.body.name,
+                        password: hash,
+                        familyName: req.body.familyName,
+                        phone: req.body.phone
+                    }
+                    models.HealthOfficial.update(newHealthOfficial, { where: { email: req.body.newOfficialEmail } })
+                        .then(result => {
+                            res.status(200).json({
+                                message: "Created Successfully",
+                            })
+                        })
+                        .catch(error => {
+                            res.status(500).json({
+                                message: "Something went wrong",
+                            })
+                        })
+                }
+                else {
+                    res.status(422).json("Both Password don't matches")
+                }
+            }
+            else {
+                res.status(400).json("Invalid Code")
+            }
+        })
+        .catch((err) => {
+            res.status(404).json("User Not Found")
+        })
+}
+
 module.exports = {
     login: login,
     show: show,
     update: update,
-    register: register,
+    registerHealthOfficial: registerHealthOfficial,
     sendVerificationCode: sendVerificationCode,
-    forgetPassword: forgetPassword
+    forgetPassword: forgetPassword,
+    verifyHealthOfficial: verifyHealthOfficial
+
 }
