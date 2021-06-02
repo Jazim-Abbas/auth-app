@@ -1,7 +1,7 @@
 var vm = new Vue({
   el: "#login-app",
   data: {
-    acountType: "owner",
+    acountType: "user",
     credentials: {
       email: "",
     },
@@ -15,7 +15,7 @@ var vm = new Vue({
           this.errors = [];
           this.error = "";
 
-          console.log(res.data);
+          window.location.href = "/forget-password.html"
         } catch (err) {
           const { response } = err;
 
@@ -24,7 +24,7 @@ var vm = new Vue({
             this.errors = response.data;
           } else {
             this.errors = [];
-            this.error = response.data.message;
+            this.error = response.data;
           }
 
           console.log(response);
