@@ -158,7 +158,6 @@ const update = (req, res) => {
 const sendVerificationCode = (req, res) => {
   models.User.findOne({ where: { email: req.body.email } })
   try {
-    console.log(code);
     sendMail(req.body.email)
     const updateUser = {
       verificationCode: code
@@ -186,10 +185,15 @@ const forgetPassword = (req, res) => {
         const updatePassword = {
           password: hash
         }
-        models.User.update(updatePassword, { where: { email: result.email } })
-          .then(
-            res.status(200).json("Successfully Updated Password")
-          )
+        if (req.body.password === req.body.confirmPassword) {
+          models.User.update(updatePassword, { where: { email: result.email } })
+            .then(
+              res.status(200).json("Successfully Updated Password")
+            )
+        }
+        else {
+          res.status(422).json("Both Password don't matches")
+        }
       }
       else {
         res.status(400).json("Invalid Code")

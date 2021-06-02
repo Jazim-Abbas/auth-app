@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const e = require("express");
 const env = require("dotenv").config();
+const { sendMail, code } = require("../middlewares/sendEmail")
 
 const register = (req, res) => {
   const body = req.body;
@@ -151,9 +152,60 @@ const update = (req, res) => {
     });
 };
 
+const sendVerificationCode = (req, res) => {
+  models.VenueOwner.findOne({ where: { email: req.body.email } })
+  try {
+    sendMail(req.body.email)
+    const updateVenueOwner = {
+      verificationCode: code
+    }
+    models.VenueOwner.update(updateVenueOwner, { where: { email: req.body.email } })
+      .then(
+        res.status(200).json("Verification Code Sent")
+      )
+      .catch((err) => {
+        res.status(500).json("Server Error" + err)
+      })
+  }
+  catch {
+    (err) => {
+      res.status(404).json("User Not Found")
+    }
+  }
+}
+
+const forgetPassword = (req, res) => {
+  models.VenueOwner.findOne({ where: { email: req.body.email } })
+    .then((result) => {
+      if (result.verificationCode == req.body.verificationCode) {
+        const hash = bcrypt.hashSync(req.body.password, 10);
+        const updatePassword = {
+          password: hash
+        }
+        if (req.body.password === req.body.confirmPassword) {
+          models.VenueOwner.update(updatePassword, { where: { email: result.email } })
+            .then(
+              res.status(200).json("Successfully Updated Password")
+            )
+        }
+        else {
+          res.status(422).json("Both Password don't matches")
+        }
+      }
+      else {
+        res.status(400).json("Invalid Code")
+      }
+    })
+    .catch((err) => {
+      res.status(404).json("User Not Found")
+    })
+}
+
 module.exports = {
   register: register,
   login: login,
   show: show,
   update: update,
+  sendVerificationCode: sendVerificationCode,
+  forgetPassword: forgetPassword
 };

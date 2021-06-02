@@ -21,8 +21,13 @@ const updateUserSchema = yup.object({
   password: yup.string().optional(),
 });
 
+const forgetPasswordSchema = yup.object({
+  email: yup.string().email().required()
+})
+
 module.exports = {
   userSchema,
   loginSchema,
   updateUserSchema,
+  forgetPasswordSchema,
 };

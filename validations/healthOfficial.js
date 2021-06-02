@@ -8,4 +8,9 @@ const healthOfficialSchema = yup.object({
     phone: yup.number()
 })
 
-module.exports = healthOfficialSchema
+const forgetPasswordSchema = yup.object({
+    email: yup.string().email().required()
+})
+
+
+module.exports = { healthOfficialSchema, forgetPasswordSchema }

@@ -21,4 +21,8 @@ const updateSchema = yup.object({
   postcode: yup.number(),
 });
 
-module.exports = { venueOwnerSchema, updateSchema };
+const forgetPasswordSchema = yup.object({
+  email: yup.string().email().required()
+})
+
+module.exports = { venueOwnerSchema, updateSchema, forgetPasswordSchema };

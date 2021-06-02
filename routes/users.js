@@ -6,14 +6,15 @@ const {
   userSchema,
   loginSchema,
   updateUserSchema,
+  forgetPasswordSchema,
 } = require("../validations/user");
 const authentication = require("../middlewares/authenticateToken");
 
 router.get("/profile", authentication, user.show);
 router.post("/register", validation(userSchema), user.register);
 router.post("/login", validation(loginSchema), user.login);
-router.post("/send-verification-code", user.sendVerificationCode);
-router.post("/forget-password", user.forgetPassword);
+router.post("/send-verification-code", validation(forgetPasswordSchema), user.sendVerificationCode);
+router.post("/forget-password", validation(forgetPasswordSchema), user.forgetPassword);
 router.patch(
   "/update",
   authentication,
