@@ -10,35 +10,33 @@ var vm = new Vue({
   },
   methods: {
     async onSendMail() {
-      alert(this.sendMailUrl);
+        try {
+          const res = await axios.post(this.sendMailUrl, { ...this.credentials });
+          this.errors = [];
+          this.error = "";
 
-      //   try {
-      //     const res = await axios.post(this.loginURL, { ...this.credentials });
-      //     this.errors = [];
-      //     this.error = "";
+          console.log(res.data);
+        } catch (err) {
+          const { response } = err;
 
-      //     console.log(res.data);
-      //   } catch (err) {
-      //     const { response } = err;
+          if (response.status === 422) {
+            this.error = "";
+            this.errors = response.data;
+          } else {
+            this.errors = [];
+            this.error = response.data.message;
+          }
 
-      //     if (response.status === 422) {
-      //       this.error = "";
-      //       this.errors = response.data;
-      //     } else {
-      //       this.errors = [];
-      //       this.error = response.data.message;
-      //     }
-
-      //     console.log(response);
-      //   }
+          console.log(response);
+        }
     },
   },
   computed: {
     sendMailUrl() {
       const urls = {
-        owner: "/owner",
-        user: "/user",
-        healthOfficial: "/healt",
+        owner: "/venue-owner/send-verification-code",
+        user: "/user/send-verification-code",
+        healthOfficial: "/health-official/send-verification-code",
       };
 
       return urls[this.acountType];
