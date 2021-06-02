@@ -1,9 +1,11 @@
 var vm = new Vue({
   el: "#login-app",
   data: {
-    acountType: "owner",
+    acountType: "user",
     credentials: {
       email: "",
+      password: "",
+      verificationCode: "",
     },
     error: "",
     errors: [],
