@@ -104,18 +104,18 @@ const update = (req, res) => {
 
 const sendVerificationCode = (req, res) => {
     models.HealthOfficial.findOne({ where: { email: req.body.email } })
-    try {
-        sendMail(req.body.email, res)
-        const updateHealthOfficial = {
-            verificationCode: code
+    .then((result) => {
+        if(result) {
+            sendMail(result.email, res)
+            const updateHealthOfficial = {
+                verificationCode: code
+            }
+            models.HealthOfficial.update(updateHealthOfficial, { where: { email: req.body.email } })
         }
-        models.HealthOfficial.update(updateHealthOfficial, { where: { email: req.body.email } })
-    }
-    catch {
-        (err) => {
+        else {
             res.status(404).json("User Not Found")
         }
-    }
+    })
 }
 
 const forgetPassword = (req, res) => {

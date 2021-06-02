@@ -154,18 +154,18 @@ const update = (req, res) => {
 
 const sendVerificationCode = (req, res) => {
   models.VenueOwner.findOne({ where: { email: req.body.email } })
-  try {
-    sendMail(req.body.email, res)
-    const updateVenueOwner = {
-      verificationCode: code
-    }
-    models.VenueOwner.update(updateVenueOwner, { where: { email: req.body.email } })
-  }
-  catch {
-    (err) => {
-      res.status(404).json("User Not Found")
-    }
-  }
+    .then((result) => {
+      if (result) {
+        sendMail(result.email, res)
+        const updateVenueOwner = {
+          verificationCode: code
+        }
+        models.VenueOwner.update(updateVenueOwner, { where: { email: req.body.email } })
+      }
+      else {
+        res.status(404).json("User Not Found")
+      }
+    })
 }
 
 const forgetPassword = (req, res) => {
