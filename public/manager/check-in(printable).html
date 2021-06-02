@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Check-In(Printable) | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="/javascripts/redirect-venue-owner.js"></script>
+</head>
+<body>
+    <main id="checkin">
+        <img class="centred" id="logo" src="/images/logo.png" alt="Check-in logo">
+        <br />
+        <h1 class="centre-text">COVID 19 Check-In</h1>
+        <br />
+
+        <!-- QR code that points to the check-in page -->
+        <div id='qr' class="centred"></div>
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+        <script>
+            var qr = new QRCode(document.getElementById('qr'), window.location.hostname + "/check-in");
+            document.getElementById('qr').getElementsByTagName('img')[0].classList.add("centred");
+            document.getElementById('qr').getElementsByTagName('img')[0].classList.add("full-width");
+        </script>
+
+        <br />
+        <h1 class="centre-text">ABCDE</h1>
+        <br />
+        <h2 class="centre-text">My Venue Name</h2>
+    </main>
+</body>
+</html>

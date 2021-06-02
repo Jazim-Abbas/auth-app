@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Check-In History | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="/javascripts/checkin-history.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <nav>
+        <script src="/javascripts/navigation.js"></script>
+    </nav>
+    <header>
+        <script src="/javascripts/header.js"></script>
+    </header>
+    <div class='flex'>
+        <main id="app">
+            <h1>Check-In History</h1>
+            <hr />
+
+            <div id='map'></div>
+
+            <hr />
+
+            <table class="pure-table pure-table-striped full-width">
+                <tr>
+                    <th>Venue</th>
+                    <th>Address</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+                <tr v-for="checkin in checkins">
+                    <td>{{ checkin.name }}</td>
+                    <td>{{ checkin.address }}</td>
+                    <td>{{ checkin.date }}</td>
+                    <td>{{ checkin.time }}</td>
+                </tr>
+            </table>
+        </main>
+        <footer>
+            <script src="javascripts/footer.js"></script>
+        </footer>
+    </div>
+</body>
+</html>

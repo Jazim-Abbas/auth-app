@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/javascripts/dashboard.js" defer></script>
+    <script src="/javascripts/cases-chart.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <nav>
+        <script src="/javascripts/navigation.js"></script>
+    </nav>
+    <header>
+        <script src="/javascripts/header.js"></script>
+    </header>
+    <div class='flex'>
+        <main id='app'>
+            <h1>Dashboard</h1>
+            <hr />
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1" v-cloak>
+                    <div class="dashboard-card">
+                        <i class="fas fa-clipboard-check notification-icon good left"></i><div class="left"><p>Looking to check-in to a venue?<br /><a href="/check-in.html">Check-in Now</a></p></div>
+                    </div>
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1" v-cloak>
+                    <div class="dashboard-card" v-if="hotspot_visit == 0">
+                        <i class="far fa-check-circle notification-icon good left"></i><div class="left"><p>You have not been to an active COVID-19 hotspot.</p></div>
+                    </div>
+                    <div class="dashboard-card" v-else-if="hotspot_visit == 1">
+                        <p><i class="fas fa-exclamation-triangle notification-icon bad"></i>You have been to a COVID-19 hotspot area. Please monitor for symptoms and get tested if you fell unwell.</p>
+                    </div>
+                    <div class="dashboard-card" v-else-if="hotspot_visit == 2">
+                        <p><i class="fas fa-exclamation-triangle notification-icon bad"></i>You have been to a COVID-19 hotspot venue. Please isolate immediately and wait for our contact tracers to get in touch with you.</p>
+                    </div>
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1" v-if="user_type == 'venue-owner'" v-cloak>
+                    <div class="dashboard-card" v-if="hotspot_visit == 0">
+                        <i class="far fa-check-circle notification-icon good left"></i><div class="left"><p>No infectious people have visited your venue.</p></div>
+                    </div>
+                    <div class="dashboard-card" v-else-if="hotspot_visit == 1">
+                        <p><i class="fas fa-exclamation-triangle notification-icon bad"></i>Someone has attended your venue while infectious. Our contact tracers will get in touch with you shortly.</p>
+                    </div>
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1-3" v-if="settings.dashCases">
+                    <div class="dashboard-card">
+                        <h2>Cases</h2>
+                        <hr />
+                        <table class="pure-table pure-table-striped full-width">
+                            <tr>
+                                <th>State</th>
+                                <th>Active</th>
+                                <th>Total</th>
+                            </tr>
+                            <tr v-for="record in cases" v-cloak>
+                                <td>{{ record.state }}</td>
+                                <td>{{ record.active }}</td>
+                                <td>{{ record.total }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-3" v-if="settings.dashDeaths">
+                    <div class="dashboard-card">
+                        <h2>Deaths</h2>
+                        <hr />
+                        <table class="pure-table pure-table-striped full-width">
+                            <tr>
+                                <th>State</th>
+                                <th>This Week</th>
+                                <th>Total</th>
+                            </tr>
+                            <tr v-for="record in deaths" v-cloak>
+                                <td>{{ record.state }}</td>
+                                <td>{{ record.active }}</td>
+                                <td>{{ record.total }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-3" v-if="settings.dashInfo">
+                    <div class="dashboard-card">
+                        <h2>Important Info</h2>
+                        <hr />
+                        <table class="pure-table pure-table-striped full-width">
+                            <tr v-for="record in info" v-cloak>
+                                <td><a v-bind:href="record.url">{{ record.state }}</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+<!-- TODO: Add cases chart.
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <div class="dashboard-card">
+                        <h2>Cases</h2>
+                        <hr />
+                        <div><canvas id="cases-chart"></canvas></div>
+                    </div>
+                </div>
+-->
+            </div>
+        </main>
+        <footer>
+            <script src="javascripts/footer.js"></script>
+        </footer>
+    </div>
+</body>
+</html>

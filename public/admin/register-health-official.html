@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register Health Official | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="/javascripts/redirect-health-official.js"></script>
+    <script src="/javascripts/register-health-official.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <nav>
+        <script src="/javascripts/navigation.js"></script>
+    </nav>
+    <header>
+        <script src="/javascripts/header.js"></script>
+    </header>
+    <div class='flex'>
+        <main id="app">
+            <h1>Register Health Official</h1>
+            <hr />
+            <form class="pure-form pure-g details-form">
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <label for="email">Email Address</label>
+                        <input id="email" name="email" type="email" class="full-width" />
+                    </div>
+                </div>
+
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <button class="pure-button pure-button-primary right">Send Registration Instructions</button>
+                    </div>
+                </div>
+            </form>
+
+            <hr />
+
+            <table class="pure-table pure-table-striped full-width">
+                <tr>
+                    <th>Email</th>
+                    <th>Expires</th>
+                    <th>Manage</th>
+                </tr>
+                <tr v-for="admin in pending">
+                    <td>{{ admin.email }}</td>
+                    <td>{{ admin.expires }}</td>
+                    <td>
+                        <button class="pure-button" v-on:click="cancelPendingRegistration(admin.email);">X</button>
+                    </td>
+                </tr>
+            </table>
+        </main>
+        <footer>
+            <script src="javascripts/footer.js"></script>
+        </footer>
+    </div>
+</body>
+</html>

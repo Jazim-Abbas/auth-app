@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Details | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="/javascript/check-user-role.js"></script>
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="/javascripts/account-details.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <nav>
+        <script src="/javascripts/navigation.js"></script>
+    </nav>
+    <header>
+        <script src="/javascripts/header.js"></script>
+    </header>
+    <div class='flex'>
+        <main id="app">
+            <h1>Account Details</h1>
+            <form class="pure-form pure-g details-form">
+                <div class="pure-u-1 pure-u-md-1-2">
+                    <div class="grid-pad">
+                        <label for="given-name">Given Name</label>
+                        <input id="given-name" name="given-name" type="text" class="full-width" v-model="user.name" />
+                    </div>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-2">
+                    <div class="grid-pad">
+                        <label for="family-name">Family Name</label>
+                        <input id="family-name" name="family-name" type="text" class="full-width" v-model="user.familyName" />
+                    </div>
+                </div>
+
+                <div class="pure-u-1" >
+                    <div class="grid-pad">
+                         <label for="email">Email</label>
+                         <input id="email" name="email" type="email" class="full-width" v-model="user.email" />
+                     </div>
+                </div>
+
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="phone" type="tel" class="full-width" v-model="user.phone" />
+                    </div>
+                </div>
+
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <label for="password">New Password</label>
+                        <input id="password" name="password" type="password" v-model="user.password" class="full-width" />
+                    </div>
+                </div>
+
+                <!-- <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <label for="password-confirm">Confirm Password</label>
+                        <input id="password-confirm" name="password-confirm" type="password" class="full-width" />
+                    </div>
+                </div> -->
+
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <input type="button" @click="onUpdateProfile()" class="pure-button pure-button-primary right" value="Apply Changes" />
+                        <button class="pure-button right" type="button" onclick="revert();">Revert</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <footer>
+            <script src="javascripts/footer.js"></script>
+        </footer>
+    </div>
+</body>
+</html>

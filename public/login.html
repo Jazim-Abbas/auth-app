@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="/javascripts/login.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <div id="login-app" class="flex">
+        <main class="login-form centred">
+            <img class="centred" id="logo" src="/images/logo.png" alt="logo">
+            <h1 class="centre-text">COVID-19 CHECK-IN</h1>
+            <br />
+            <form class="pure-form pure-g" action="/user/index.html">
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <input class="icon-input" type="email" name="email" id="email" required v-model="credentials.email" />
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                </div>
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <input class="icon-input" type="password" name="password" id="password" required v-model="credentials.password" />
+                        <i class="fa fa-lock"></i>
+                    </div>
+                </div>
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <input type="checkbox" name="venue-owner" id="venue-owner" v-model="isOwner" />
+                        <label for="venue-owner"> Are you venue Owner?</label>
+                    </div>
+                </div>
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <button type="button" class="pure-button pure-button-primary right" @click="onLogin()">Login</button>
+                    </div>
+                </div>
+
+                <div class="pure-u-1 alert" v-if="error || errors">
+                    <div class="grid-pad">
+                        <p v-if="error">{{ error }}</p>
+
+                        <p v-if="errors.length > 0" v-for="error in errors" :key="error">{{ error }}</p>
+                    </div>
+                </div>
+
+                <div class="pure-u-1-2">
+                    <div class="grid-pad">
+                        <a href="#">Forgot your password?</a>
+                    </div>
+                </div>
+                <div class="pure-u-1-2">
+                    <div class="grid-pad">
+                        <span class="right">Not Registered? <a href="/register.html">Register</a></span>
+                    </div>
+                </div>
+            </form>
+
+            <div class="separator full-width"><span>or</span></div>
+
+            <p class="centre-text">Sign in with your social media account</p>
+            <!-- Social login buttons -->
+            <div class="centred flex-centre">
+                <button class="social-login twitter" type="button" title="Sign in with Twitter"><i class="fa fa-twitter"></i></button>
+                <button class="social-login facebook" type="button" title="Sign in with Facebook"><i class="fa fa-facebook"></i></button>
+                <button class="social-login google" type="button" title="Sign in with Google"><i class="fab fa-google"></i></button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

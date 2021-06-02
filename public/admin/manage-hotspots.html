@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manage Hotspots | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="/javascripts/manage-hotspots.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <nav>
+        <script src="/javascripts/navigation.js"></script>
+    </nav>
+    <header>
+        <script src="/javascripts/header.js"></script>
+    </header>
+    <div class='flex'>
+        <main id="app">
+            <h1>Manage Hotspots</h1>
+            <hr />
+            <button class="horizontal-tab left" v-on:click="areas = false;" v-bind:class="areas ? '' : 'active'">Hotspot Venues</button>
+            <button class="horizontal-tab left" v-on:click="areas = true;" v-bind:class="areas ? 'active' : ''">Hotspot Areas</button>
+
+            <div v-if="areas" class="clear-float">
+                <h2>Hotspot Areas</h2>
+                <hr />
+
+                <form class="pure-form pure-g">
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="area-city">City</label>
+                            <input class="full-width" type="text" name="city" id="area-city" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="area-postcode">Postcode</label>
+                            <input class="full-width" type="text" name="postcode" id="area-postcode" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="area-start-date">Start Date</label>
+                            <input class="full-width" type="date" name="start-date" id="area-start-date" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="area-start-time">Start Time</label>
+                            <input class="full-width" type="time" name="start-time" id="area-start-time" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="area-end-date">End Date</label>
+                            <input class="full-width" type="date" name="end-date" id="area-end-date" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="area-end-time">End Time</label>
+                        <input class="full-width" type="time" name="end-time" id="area-end-time" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-4">
+                        <div class="grid-pad">
+                            <br />
+                            <input class="pure-button pure-button-primary pure-u-1-4 full-width" type="submit" value="Create Hotspot" />
+                        </div>
+                    </div>
+                </form>
+
+                <table class="pure-table pure-table-striped full-width">
+                    <tr>
+                        <th>Town/City</th>
+                        <th>Postcode</th>
+                        <th>Start Date</th>
+                        <th>Start Time</th>
+                        <th>End Date</th>
+                        <th>End Time</th>
+                        <th>Management</th>
+                    </tr>
+                    <tr v-for="hotspot in hotspot_areas">
+                        <td>{{ hotspot.city }}</td>
+                        <td>{{ hotspot.postcode }}</td>
+                        <td>{{ hotspot.startDate }}</td>
+                        <td>{{ hotspot.startTime }}</td>
+                        <td>{{ hotspot.endDate }}</td>
+                        <td>{{ hotspot.endTime }}</td>
+                        <td>
+                            <button class="pure-button">X</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div v-else class="clear-float">
+                <h2>Hotspot Venues</h2>
+                <hr />
+
+                <form class="pure-form pure-g">
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-name">Venue Name</label>
+                            <input class="full-width" type="text" name="venue-name" id="venue-name" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-street-no">Street Number</label>
+                            <input class="full-width" type="text" name="street-no" id="venue-street-no" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-street-name">Street Name</label>
+                            <input class="full-width" type="text" name="street-name" id="venue-street-name" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-postcode">Postcode</label>
+                            <input class="full-width" type="text" name="postcode" id="venue-postcode" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-start-date">Start Date</label>
+                            <input class="full-width" type="date" name="start-date" id="venue-start-date" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-start-time">Start Time</label>
+                            <input class="full-width" type="time" name="start-time" id="venue-start-time" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-end-date">End Date</label>
+                            <input class="full-width" type="date" name="end-date" id="venue-end-date" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-8">
+                        <div class="grid-pad">
+                            <label for="venue-end-time">End Time</label>
+                        <input class="full-width" type="time" name="end-time" id="venue-end-time" />
+                        </div>
+                    </div>
+                    <div class="pure-u-1-4">
+                        <div class="grid-pad">
+                            <br />
+                            <input class="pure-button pure-button-primary pure-u-1-4 full-width" type="submit" value="Create Hotspot" />
+                        </div>
+                    </div>
+                </form>
+
+                <table class="pure-table pure-table-striped full-width">
+                    <tr>
+                        <th>Venue Name</th>
+                        <th>Street Number</th>
+                        <th>Street Name</th>
+                        <th>Town/City</th>
+                        <th>Postcode</th>
+                        <th>State</th>
+                        <th>Start Date</th>
+                        <th>Start Time</th>
+                        <th>End Date</th>
+                        <th>End Time</th>
+                        <th>Management</th>
+                    </tr>
+                    <tr v-for="hotspot in hotspot_venues">
+                        <td>{{ hotspot.name }}</td>
+                        <td>{{ hotspot.streetNo }}</td>
+                        <td>{{ hotspot.streetName }}</td>
+                        <td>{{ hotspot.city }}</td>
+                        <td>{{ hotspot.postcode }}</td>
+                        <td>{{ hotspot.state }}</td>
+                        <td>{{ hotspot.startDate }}</td>
+                        <td>{{ hotspot.startTime }}</td>
+                        <td>{{ hotspot.endDate }}</td>
+                        <td>{{ hotspot.endTime }}</td>
+                        <td>
+                            <button class="pure-button">X</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </main>
+        <footer>
+            <script src="javascripts/footer.js"></script>
+        </footer>
+    </div>
+</body>
+</html>

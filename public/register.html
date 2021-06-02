@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="/javascripts/register.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <main id="app" class="centred">
+        <form class="pure-form pure-g centred details-form" action="/login.html" >
+            <div class="pure-u-1">
+                <img class="centred" id="logo" src="/images/logo.png" alt="logo">
+            </div>
+
+            <div class="pure-u-1">
+                <h1>Register</h1>
+                <hr />
+            </div>
+
+            <div class="pure-u-1">
+                <h2>Personal Details</h2>
+                <hr />
+            </div>
+
+            <div class="pure-u-1 pure-u-md-1-2">
+                <div class="grid-pad">
+                    <label for="given-name">Given Name</label>
+                    <input id="given-name" name="given-name" type="text" class="full-width" required v-model="credentials.name" />
+                </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <div class="grid-pad">
+                    <label for="family-name">Family Name</label>
+                    <input id="family-name" name="family-name" type="text" class="full-width" required v-model="credentials.familyName" />
+                </div>
+            </div>
+
+            <div class="pure-u-1" >
+                <div class="grid-pad">
+                     <label for="email">Email</label>
+                     <input id="email" name="email" type="email" class="full-width" required v-model="credentials.email" />
+                 </div>
+            </div>
+
+            <div class="pure-u-1">
+                <div class="grid-pad">
+                    <label for="phone">Phone</label>
+                    <input id="phone" name="phone" type="tel" class="full-width" required v-model="credentials.phone" />
+                </div>
+            </div>
+
+            <div class="pure-u-1">
+                <hr />
+            </div>
+
+            <div class="pure-u-1">
+                <div class="grid-pad">
+                    <label for="password">New Password</label>
+                    <input id="password" name="password" type="password" class="full-width" required v-model="credentials.password" />
+                </div>
+            </div>
+
+            <div class="pure-u-1">
+                <div class="grid-pad">
+                    <label for="password-confirm">Confirm Password</label>
+                    <input id="password-confirm" name="password-confirm" v-model="credentials.confirmPassword" type="password" class="full-width" oninput="validatePassword()" required />
+                </div>
+            </div>
+
+            <div class="pure-u-1">
+                <hr />
+            </div>
+
+            <div class="pure-u-1">
+                <div class="grid-pad">
+                    <input type="checkbox" name="venue-owner" id="venue-owner" v-model="venue_owner" />
+                    <label for="venue-owner">I am the owner of a venue</label>
+                </div>
+            </div>
+
+            <div class="pure-u-1" v-if="venue_owner">
+                <h2>Venue Details</h2>
+                <hr />
+            </div>
+
+            <div class="pure-u-1" v-if="venue_owner">
+                <div class="grid-pad">
+                    <label for="venue-name">Venue Name</label>
+                    <input id="venue-name" name="venue-name" type="text" class="full-width" v-model="venueDetail.venueName" v-bind:required="venue_owner" />
+                </div>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-4" v-if="venue_owner">
+                <div class="grid-pad">
+                    <label for="street-no">Street Number</label>
+                    <input id="street-no" name="street-no" type="text" class="full-width" v-model="venueDetail.streetNumber" v-bind:required="venue_owner" />
+                </div>
+            </div>
+
+            <div class="pure-u-1 pure-u-md-3-4" v-if="venue_owner">
+                <div class="grid-pad">
+                    <label for="street-name">Street Name</label>
+                    <input id="street-name" name="street-name" v-model="venueDetail.streetName" type="text" class="full-width" v-bind:required="venue_owner" />
+                 </div>
+            </div>
+
+            <div class="pure-u-1 pure-u-md-1-2" v-if="venue_owner">
+                <div class="grid-pad">
+                    <label for="city">Town/City</label>
+                    <input id="city" name="city" type="text" v-model="venueDetail.town" class="full-width" v-bind:required="venue_owner" />
+                </div>
+            </div>
+
+            <div class="pure-u-1 pure-u-md-1-2" v-if="venue_owner">
+                <div class="grid-pad">
+                    <label for="postcode">Postcode</label>
+                    <input id="postcode" name="postcode" type="number" v-model="venueDetail.postcode" class="full-width" v-bind:required="venue_owner" />
+                </div>
+            </div>
+
+            <div class="pure-u-1">
+                <div class="grid-pad">
+                    <button class="pure-button" type="button" onclick="back()">Back</button>
+                    <!-- <input type="submit" class="pure-button pure-button-primary right" value="Create Account" /> -->
+                    <button type="button" class="pure-button pure-button-primary right" @click="onRegister()">Create Account</button>
+                </div>
+            </div>
+
+
+            <div class="pure-u-1" v-if="error">
+                <p class="alert">{{ error }}</p>
+            </div>
+
+            <div class="pure-u-1" v-if="errors.length > 0">
+                <p class="alert" v-for="error in errors" :key="error">{{ error }}</p>
+            </div>
+
+
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manage Venues | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="/javascripts/manage-venues.js" defer></script>
+    <script src="/javascripts/redirect-health-official.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <nav>
+        <script src="/javascripts/navigation.js"></script>
+    </nav>
+    <header>
+        <script src="/javascripts/header.js"></script>
+    </header>
+    <div class='flex'>
+        <main id='app'>
+            <h1>Manage Venues</h1>
+            <hr />
+            <form class="pure-form pure-g" onsubmit="return search();">
+                <div class="pure-u-1 pure-u-md-1-2">
+                    <label for="search-term">Search Term</label>
+                    <br />
+                    <input id="search-term" type="search" v-model="search_data.term" name="search-term" class="pure-u-1" />
+                </div>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <label for="search-by">Search By</label>
+                    <br />
+                    <select id="search-by" name="search-by" class="pure-u-1" v-model="search_data.by">
+                        <option value="name">Venue Name</option>
+                        <option value="streetName">Street Name</option>
+                        <option value="city">Town/City</option>
+                        <option value="postcode">Postcode</option>
+                        <option value="state">State</option>
+                    </select>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <br />
+                    <input class="pure-button pure-button-primary pure-u-1" type="submit" value="Search" />
+                </div>
+            </form>
+            <hr />
+            <table class="pure-table pure-table-striped full-width">
+                <tr>
+                    <th>Name</th>
+                    <th>Street Number</th>
+                    <th>Street Name</th>
+                    <th>Town/City</th>
+                    <th>Postcode</th>
+                    <th>State</th>
+                    <th>Management</th>
+                </tr>
+                <tr v-for="(venue, index) in venues">
+                    <td>{{ venue.name }}</td>
+                    <td>{{ venue.streetNo }}</td>
+                    <td>{{ venue.streetName }}</td>
+                    <td>{{ venue.city }}</td>
+                    <td>{{ venue.postcode }}</td>
+                    <td>{{ venue.state }}</td>
+                    <td>
+                        <button class="pure-button" v-on:click="manage_venue(index)">Manage</button>
+                        <button class="pure-button" v-on:click="view_checkin_history(index)">Check-in History</button>
+                        <button class="pure-button" v-on:click="view_owner(index)">Owner</button>
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <form class="pure-form pure-g" onsubmit="return false;">
+                <div class="pure-u-4-5"></div>
+                <input class="pure-u-1-5" type="number" v-model="page_size" onchange="setPage(0)" min="1"  max="100" />
+
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(-1)">&lt;&lt;</button>
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(-1)">&lt;</button>
+                <input class="pure-u-1-5" type="number" v-model="pg" onchange="setPage(0)" min="1" />
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(1)">&gt;</button>
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(1)">&gt;&gt;</button>
+            </form>
+
+            <div class="darken-background" v-if="viewing_owner">
+                <div class="details-form popup-card">
+                    <h1 class="left">Venue Owner</h1>
+                    <button class="pure-button right" onclick="stopViewingOwner();">X</button>
+                    <form class="pure-form pure-g clear-float" onsubmit="return stopViewingOwner();">
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <div class="grid-pad">
+                                <label for="given-name">Given Name</label>
+                                <input id="given-name" name="given-name" type="text" class="full-width" v-model="owner.givenName" readonly />
+                            </div>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <div class="grid-pad">
+                                <label for="family-name">Family Name</label>
+                                <input id="family-name" name="family-name" type="text" class="full-width" v-model="owner.familyName" readonly />
+                            </div>
+                        </div>
+
+                        <div class="pure-u-1" >
+                            <div class="grid-pad">
+                                 <label for="email">Email</label>
+                                 <input id="email" name="email" type="email" class="full-width" v-model="owner.email" readonly />
+                             </div>
+                        </div>
+
+                        <div class="pure-u-1">
+                            <div class="grid-pad">
+                                <label for="phone">Phone</label>
+                                <input id="phone" name="phone" type="tel" class="full-width" v-model="owner.phone" readonly />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="darken-background" v-if="managing_venue">
+                <div class="details-form popup-card">
+                    <h1 class="left">Venue Details</h1>
+                    <button class="pure-button right" onclick="stopManagingVenue();">X</button>
+                    <form class="pure-form pure-g clear-float" onsubmit="return stopManagingVenue();">
+                        <div class="pure-u-1">
+                            <div class="grid-pad">
+                                <label for="venue-name">Venue Name</label>
+                                <input id="venue-name" name="venue-name" type="text" class="full-width" v-model="venue.name" />
+                            </div>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <div class="grid-pad">
+                                <label for="street-no">Street Number</label>
+                                <input id="street-no" name="street-no" type="text" class="full-width" v-model="venue.streetNo" />
+                            </div>
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-3-4" >
+                            <div class="grid-pad">
+                                <label for="street-name">Street Name</label>
+                                <input id="street-name" name="street-name" type="text" class="full-width" v-model="venue.streetName" />
+                             </div>
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <div class="grid-pad">
+                                <label for="city">Town/City</label>
+                                <input id="city" name="city" type="text" class="full-width" v-model="venue.city" />
+                            </div>
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <div class="grid-pad">
+                                <label for="postcode">Postcode</label>
+                                <input id="postcode" name="postcode" type="number" class="full-width" v-model="venue.postcode" />
+                            </div>
+                        </div>
+
+                        <div class="pure-u-1">
+                            <div class="grid-pad">
+                                <button class="pure-button pure-button-primary right">Apply Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="darken-background" v-if="viewing_checkins">
+                <div class="details-form popup-card">
+                    <h1 class="left">Venue Check-in History</h1>
+                    <button class="pure-button right" onclick="stopViewingCheckins();">X</button>
+                    <table class="pure-table pure-table-striped full-width">
+                        <tr>
+                            <th>Given Name</th>
+                            <th>Family Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                        <tr v-for="checkin in checkin_history">
+                            <td>{{ checkin.givenName }}</td>
+                            <td>{{ checkin.familyName }}</td>
+                            <td>{{ checkin.date }}</td>
+                            <td>{{ checkin.time }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <script src="javascripts/footer.js"></script>
+        </footer>
+    </div>
+</body>
+</html>

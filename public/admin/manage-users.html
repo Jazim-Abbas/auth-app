@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manage Users | COVID-19 Contact Tracing</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="/javascripts/manage-users.js" defer></script>
+    <script src="/javascripts/redirect-health-official.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
+<body>
+    <nav>
+        <script src="/javascripts/navigation.js"></script>
+    </nav>
+    <header>
+        <script src="/javascripts/header.js"></script>
+    </header>
+    <div class='flex'>
+        <main id='app'>
+            <h1>Manage Users</h1>
+            <hr />
+            <form class="pure-form pure-g" onsubmit="return search();">
+                <div class="pure-u-1 pure-u-md-1-2">
+                    <label for="search-term">Search Term</label>
+                    <br />
+                    <input id="search-term" type="search" v-model="search_data.term" name="search-term" class="pure-u-1" />
+                </div>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <label for="search-by">Search By</label>
+                    <br />
+                    <select id="search-by" name="search-by" class="pure-u-1" v-model="search_data.by">
+                        <option value="givenName">Given Name</option>
+                        <option value="familyName">Family Name</option>
+                        <option value="email">Email Address</option>
+                        <option value="phone">Phone Number</option>
+                    </select>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <br />
+                    <input class="pure-button pure-button-primary pure-u-1" type="submit" value="Search" />
+                </div>
+            </form>
+            <hr />
+            <table class="pure-table pure-table-striped full-width">
+                <tr>
+                    <th>Given Name</th>
+                    <th>Family Name</th>
+                    <th>Email Address</th>
+                    <th>Phone Number</th>
+                    <th>Management</th>
+                </tr>
+                <tr v-for="(user, index) in users">
+                    <td>{{ user.givenName }}</td>
+                    <td>{{ user.familyName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>
+                        <button class="pure-button" v-on:click="manage_user(index)">Manage</button>
+                        <button class="pure-button" v-on:click="view_checkin_history(index)">Check-in History</button>
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <form class="pure-form pure-g" onsubmit="return false;">
+                <div class="pure-u-4-5"></div>
+                <input class="pure-u-1-5" type="number" v-model="page_size" onchange="setPage(0)" min="1" max="100" />
+
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(-1)">&lt;&lt;</button>
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(-1)">&lt;</button>
+                <input class="pure-u-1-5" type="number" v-model="pg" onchange="setPage(0)" min="1" />
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(1)">&gt;</button>
+                <button type="button" class="pure-button pure-u-1-5" onclick="setPage(1)">&gt;&gt;</button>
+            </form>
+
+            <div class="darken-background" v-if="managing_user">
+                <div class="details-form popup-card">
+                    <h1 class="left">Account Details</h1>
+                    <button class="pure-button right" onclick="stopManagingUser();">X</button>
+                    <form class="pure-form pure-g clear-float" onsubmit="return stopManagingUser();">
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <div class="grid-pad">
+                                <label for="given-name">Given Name</label>
+                                <input id="given-name" name="given-name" type="text" class="full-width" v-model="user.givenName" />
+                            </div>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <div class="grid-pad">
+                                <label for="family-name">Family Name</label>
+                                <input id="family-name" name="family-name" type="text" class="full-width" v-model="user.familyName" />
+                            </div>
+                        </div>
+
+                        <div class="pure-u-1" >
+                            <div class="grid-pad">
+                                 <label for="email">Email</label>
+                                 <input id="email" name="email" type="email" class="full-width" v-model="user.email" />
+                             </div>
+                        </div>
+
+                        <div class="pure-u-1">
+                            <div class="grid-pad">
+                                <label for="phone">Phone</label>
+                                <input id="phone" name="phone" type="tel" class="full-width" v-model="user.phone" />
+                            </div>
+                        </div>
+
+                        <div class="pure-u-1">
+                            <div class="grid-pad">
+                                <input type="submit" class="pure-button pure-button-primary right" value="Apply Changes" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="darken-background" v-if="viewing_checkins">
+                <div class="details-form popup-card">
+                    <h1 class="left">Check-in History</h1>
+                    <button class="pure-button right" onclick="stopViewingCheckins();">X</button>
+                    <table class="pure-table pure-table-striped full-width">
+                        <tr>
+                            <th>Venue</th>
+                            <th>Address</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                        <tr v-for="checkin in checkin_history">
+                            <td>{{ checkin.name }}</td>
+                            <td>{{ checkin.address }}</td>
+                            <td>{{ checkin.date }}</td>
+                            <td>{{ checkin.time }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <script src="javascripts/footer.js"></script>
+        </footer>
+    </div>
+</body>
+</html>
