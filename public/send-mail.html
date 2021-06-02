@@ -28,24 +28,24 @@
                
                 <div class="pure-u-1">
                     <div class="grid-pad">
-                        <input type="radio" name="venue-owner" id="venue-owner" v-model="isOwner" />
+                        <input type="radio" name="accountType" id="owner" value="owner" v-model="acountType" />
                         <label for="venue-owner"> Owner</label>
                     </div>
 
                     <div class="grid-pad">
-                        <input type="radio" name="venue-owner" id="venue-owner" v-model="isOwner" />
+                        <input type="radio" name="accountType" id="user" value="user" v-model="acountType" />
                         <label for="venue-owner"> User</label>
                     </div>
 
                     <div class="grid-pad">
-                        <input type="radio" name="venue-owner" id="venue-owner" v-model="isOwner" />
+                        <input type="radio" name="accountType" id="healthOfficial" value="healthOfficial" v-model="acountType" />
                         <label for="venue-owner"> Health Official</label>
                     </div>
                 </div>
                 <div class="pure-u-1" style="margin-top: 20px;">
                     <div class="grid-pad">
-                        <button type="button" class="pure-button pure-button-primary right" @click="onLogin()">Send Mail</button>
-                        <a type="button" href="" @click="onLogin()">Back to Login</a>
+                        <button type="button" class="pure-button pure-button-primary right" @click="onSendMail()">Send Mail</button>
+                        <a href="/login.html">Back to Login</a>
                     </div>
                 </div>
 
