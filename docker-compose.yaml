@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: "mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: jazim
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: auth-app
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "8080:8080"
+    container_name: "mysql-app"
+  phpmyadmin:
+    image: "phpmyadmin"
+    depends_on:
+      - mysql
+    ports:
+      - "30002:80"
+    environment:
+      PWA_PORT: 3306
+    links:
+      - "mysql"
+    volumes:
+      - /sessions
+
+volumes:
+  mysql-data:
