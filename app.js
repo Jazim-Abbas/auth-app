@@ -6,7 +6,9 @@ var session = require('express-session');
 var mysql = require('mysql');
 const bodyParser = require("body-parser")
 const passport = require("passport")
-require("./passport-setup")
+require("./middlewares/user-passport-setup")
+require("./middlewares/venue-owner-passport-setup")
+require("./middlewares/health-official-passport-setup")
 const cookieSession = require("cookie-session")
 const cors = require('cors')
 

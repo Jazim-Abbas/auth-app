@@ -4,6 +4,8 @@ const healthOfficial = require("../controlers/healthOfficial")
 const validation = require("../middlewares/validation")
 const { healthOfficialSchema, forgetPasswordSchema, registerSchema, newOfficialSchema } = require("../validations/healthOfficial")
 const authentication = require("../middlewares/authenticateToken")
+const passport = require("passport")
+require("../middlewares/health-official-passport-setup")
 
 router.post("/login", validation(healthOfficialSchema), healthOfficial.login)
 router.patch("/update", authentication, healthOfficial.update)
@@ -12,5 +14,8 @@ router.post("/register", authentication, validation(registerSchema), healthOffic
 router.post("/send-verification-code", validation(forgetPasswordSchema), healthOfficial.sendVerificationCode);
 router.post("/forget-password", validation(forgetPasswordSchema), healthOfficial.forgetPassword);
 router.post("/verify-new-official", validation(newOfficialSchema), healthOfficial.verifyHealthOfficial);
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', passport.authenticate('google'), healthOfficial.googleLogin);
+
 
 module.exports = router;

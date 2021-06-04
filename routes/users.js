@@ -10,7 +10,7 @@ const {
 } = require("../validations/user");
 const authentication = require("../middlewares/authenticateToken");
 const passport = require("passport")
-require("../passport-setup")
+require("../middlewares/user-passport-setup")
 const models = require("../models");
 
 router.get("/profile", authentication, user.show);
@@ -25,7 +25,7 @@ router.patch(
   user.update
 );
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/failed' }), user.googleLogin);
+router.get('/google/callback', passport.authenticate('google'), user.googleLogin);
 
 
 

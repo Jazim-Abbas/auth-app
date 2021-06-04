@@ -17,7 +17,6 @@ const googleLogin = async (req, res) => {
       }
       else {
         const newUser = {
-          googleId: user.sub,
           name: user.name,
           email: user.email,
         }

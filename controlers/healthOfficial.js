@@ -4,6 +4,44 @@ const jwt = require("jsonwebtoken")
 const env = require("dotenv").config()
 const { sendMail, code } = require("../middlewares/sendEmail")
 
+const googleLogin = async (req, res) => {
+    const user = req.user._json
+
+    models.HealthOfficial.findOne({ where: { email: user.email } })
+        .then(async (result) => {
+            if (result) {
+                res.status(201).json({
+                    message: "Successfully Logged in"
+                })
+            }
+            else {
+                const newHealthOfficial = {
+                    name: user.name,
+                    email: user.email,
+                }
+
+                await models.HealthOfficial.create(newHealthOfficial)
+                    .then(result => {
+                        res.status(201).json({
+                            message: "Successfully Logged in"
+                        })
+                    })
+                    .catch(error => {
+                        res.status(500).json({
+                            message: "Something went wrong",
+                            newUser: error
+                        })
+                    })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Something went wrong",
+                newUser: error
+            })
+        })
+}
+
 const login = (req, res) => {
     const body = req.body
 
@@ -220,6 +258,6 @@ module.exports = {
     registerHealthOfficial: registerHealthOfficial,
     sendVerificationCode: sendVerificationCode,
     forgetPassword: forgetPassword,
-    verifyHealthOfficial: verifyHealthOfficial
-
+    verifyHealthOfficial: verifyHealthOfficial,
+    googleLogin: googleLogin
 }
