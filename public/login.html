@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script src="/javascripts/login.js" defer></script>
+    <script src="/javascripts/app-loading.js" defer></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
 <body>
@@ -51,7 +52,11 @@
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
-                        <button type="button" class="pure-button pure-button-primary right" @click="onLogin()">Login</button>
+                        <div class="spinner" v-if="isLoading">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                          </div>
+                        <button v-if="!isLoading" type="button" class="pure-button pure-button-primary right" @click="onLogin()">Login</button>
                     </div>
                 </div>
 
@@ -76,6 +81,9 @@
             </form>
 
             <div class="separator full-width"><span>or</span></div>
+
+              
+
 
             <p class="centre-text">Sign in with your social media account</p>
             <!-- Social login buttons -->
