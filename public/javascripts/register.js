@@ -1,6 +1,7 @@
 var vm = new Vue({
   el: "#app",
   data: {
+    isLoading: false,
     venue_owner: false,
     credentials: {
       name: "",
@@ -25,8 +26,13 @@ var vm = new Vue({
       console.log({ ...this.credentials, ...this.venueDetail });
       const credentials = { ...this.credentials, ...this.venueDetail };
 
+      this.isLoading = true;
+
       try {
         const res = await axios.post(this.registerURL, credentials);
+
+        this.isLoading = false;
+
         window.location.href = "/login.html";
       } catch (err) {
         const { response } = err;
@@ -37,6 +43,8 @@ var vm = new Vue({
           this.errors = [];
           this.error = response.data.message;
         }
+
+        this.isLoading = false;
       }
     },
   },
