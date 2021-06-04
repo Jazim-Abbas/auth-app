@@ -6,41 +6,44 @@ var vm = new Vue({
       email: "",
       password: "",
       verificationCode: "",
+      confirmPassword: ""
     },
     error: "",
     errors: [],
   },
   methods: {
-    async onSendMail() {
-      alert(this.sendMailUrl);
+    async onForgetPassword() {
+      alert(this.forgetPasswordURL);
 
-      //   try {
-      //     const res = await axios.post(this.loginURL, { ...this.credentials });
-      //     this.errors = [];
-      //     this.error = "";
+        try {
+          const res = await axios.post(this.forgetPasswordURL, { ...this.credentials });
+          this.errors = [];
+          this.error = "";
 
-      //     console.log(res.data);
-      //   } catch (err) {
-      //     const { response } = err;
+          console.log(res.data);
+        } catch (err) {
+          const { response } = err;
 
-      //     if (response.status === 422) {
-      //       this.error = "";
-      //       this.errors = response.data;
-      //     } else {
-      //       this.errors = [];
-      //       this.error = response.data.message;
-      //     }
+          // if (response.status === 422) {
+          //   this.error = "";
+          //   this.errors = response.data;
+          // } else {
+          //   this.errors = [];
+          //   this.error = response.data.message;
+          // }
 
-      //     console.log(response);
-      //   }
+          this.error = response.data;
+
+          console.log(response);
+        }
     },
   },
   computed: {
-    sendMailUrl() {
+    forgetPasswordURL() {
       const urls = {
-        owner: "/owner",
-        user: "/user",
-        healthOfficial: "/healt",
+        owner: "/venue-owner/forget-password",
+        user: "/user/forget-password",
+        healthOfficial: "/health-official/forget-password",
       };
 
       return urls[this.acountType];
