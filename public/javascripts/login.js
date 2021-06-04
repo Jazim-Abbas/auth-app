@@ -2,6 +2,7 @@ var vm = new Vue({
   el: "#login-app",
   data: {
     isOwner: false,
+    acountType: "user",
     credentials: {
       email: "",
       password: "",
@@ -41,7 +42,13 @@ var vm = new Vue({
   },
   computed: {
     loginURL() {
-      return this.isOwner ? "/venue-owner/login" : "/user/login";
+      const urls = {
+        owner: "/venue-owner/login",
+        user: "/user/login",
+        healthOfficial: "/health-official/login",
+      };
+
+      return urls[this.acountType];
     },
   },
 });

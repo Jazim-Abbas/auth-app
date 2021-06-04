@@ -8,9 +8,13 @@
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/grids-responsive-min.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
     <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-    <script src="/javascripts/redirect-health-official.js"></script>
-    <script src="/javascripts/register-health-official.js" defer></script>
+    <script src="/javascripts/new-health-official.js" defer></script>
+
+    <!-- <script src="/javascripts/redirect-health-official.js"></script> -->
+    <!-- <script src="/javascripts/register-health-official.js" defer></script> -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap" rel="stylesheet">
 <body>
@@ -28,53 +32,68 @@
                 <div class="pure-u-1">
                     <div class="grid-pad">
                         <label>Verification Code</label>
-                        <input  type="number" class="full-width" />
+                        <input  type="number" class="full-width" v-model="credentials.verificationCode"  />
                     </div>
                 </div>
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
                         <label>New Email Address</label>
-                        <input type="email" class="full-width" />
+                        <input type="email" class="full-width" v-model="credentials.newOfficialEmail" />
                     </div>
                 </div>
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
                         <label>Name</label>
-                        <input type="text" class="full-width" />
+                        <input type="text" class="full-width" v-model="credentials.name" />
                     </div>
                 </div>
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
                         <label>Family Name</label>
-                        <input type="text" class="full-width" />
+                        <input type="text" class="full-width" v-model="credentials.familyName" />
                     </div>
                 </div>
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
                         <label>Phone</label>
-                        <input type="number" class="full-width" />
+                        <input type="number" class="full-width" v-model="credentials.phone" />
                     </div>
                 </div>
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
                         <label>Password</label>
-                        <input type="text" class="full-width" />
+                        <input type="text" class="full-width" v-model="credentials.password" />
                     </div>
                 </div>
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
-                        <button class="pure-button pure-button-primary right">Send Registration Instructions</button>
+                        <label>Confirm Password</label>
+                        <input type="text" class="full-width" v-model="credentials.confirmPassword" />
+                    </div>
+                </div>
+
+                <div class="pure-u-1">
+                    <div class="grid-pad">
+                        <button class="pure-button pure-button-primary right" type="button" @click="onSubmit()">Send Registration Instructions</button>
                     </div>
                 </div>
             </form>
 
             <hr />
+
+            <div class="pure-u-1" v-if="error">
+                <p class="alert">{{ error }}</p>
+            </div>
+
+            <div class="pure-u-1" v-if="errors.length > 0">
+                <p class="alert" v-for="error in errors" :key="error">{{ error }}</p>
+            </div>
 
             
         </main>

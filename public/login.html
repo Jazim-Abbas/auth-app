@@ -31,12 +31,24 @@
                         <i class="fa fa-lock"></i>
                     </div>
                 </div>
+                
                 <div class="pure-u-1">
                     <div class="grid-pad">
-                        <input type="checkbox" name="venue-owner" id="venue-owner" v-model="isOwner" />
-                        <label for="venue-owner"> Are you venue Owner?</label>
+                        <input type="radio" name="accountType" id="owner" value="owner" v-model="acountType" />
+                        <label for="venue-owner"> Owner</label>
+                    </div>
+
+                    <div class="grid-pad">
+                        <input type="radio" name="accountType" id="user" value="user" v-model="acountType" />
+                        <label for="venue-owner"> User</label>
+                    </div>
+
+                    <div class="grid-pad">
+                        <input type="radio" name="accountType" id="healthOfficial" value="healthOfficial" v-model="acountType" />
+                        <label for="venue-owner"> Health Official</label>
                     </div>
                 </div>
+
                 <div class="pure-u-1">
                     <div class="grid-pad">
                         <button type="button" class="pure-button pure-button-primary right" @click="onLogin()">Login</button>
