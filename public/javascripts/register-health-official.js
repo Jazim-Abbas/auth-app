@@ -53,6 +53,7 @@ var vm = new Vue({
     },
     getUserToken() {
       const { token } = JSON.parse(localStorage.getItem("user"));
+      alert(token);
       return token;
     },
   },
