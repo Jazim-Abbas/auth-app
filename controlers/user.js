@@ -5,6 +5,46 @@ const env = require("dotenv").config();
 const nodemailer = require('nodemailer');
 const { sendMail, code } = require("../middlewares/sendEmail")
 
+const googleLogin = async (req, res) => {
+  const user = req.user._json
+
+  models.User.findOne({ where: { email: user.email } })
+    .then(async (result) => {
+      if (result) {
+        res.status(201).json({
+          message: "Successfully Logged in"
+        })
+      }
+      else {
+        const newUser = {
+          googleId: user.sub,
+          name: user.name,
+          email: user.email,
+        }
+
+        await models.User.create(newUser)
+          .then(result => {
+            res.status(201).json({
+              message: "Successfully Logged in"
+            })
+          })
+          .catch(error => {
+            res.status(500).json({
+              message: "Something went wrong",
+              newUser: error
+            })
+          })
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Something went wrong",
+        newUser: error
+      })
+    })
+}
+
+
 const register = (req, res) => {
   const body = req.body;
   const hash = bcrypt.hashSync(body.password, 10);
@@ -204,7 +244,8 @@ module.exports = {
   show: show,
   update: update,
   sendVerificationCode: sendVerificationCode,
-  forgetPassword: forgetPassword
+  forgetPassword: forgetPassword,
+  googleLogin: googleLogin
 };
 
 // const save = (req, res) => {

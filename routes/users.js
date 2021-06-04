@@ -9,6 +9,9 @@ const {
   forgetPasswordSchema,
 } = require("../validations/user");
 const authentication = require("../middlewares/authenticateToken");
+const passport = require("passport")
+require("../passport-setup")
+const models = require("../models");
 
 router.get("/profile", authentication, user.show);
 router.post("/register", validation(userSchema), user.register);
@@ -21,6 +24,19 @@ router.patch(
   validation(updateUserSchema),
   user.update
 );
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/failed' }), user.googleLogin);
+
+
+
+
+
+
+
+
+
+
+
 
 // function parseVenueCode(code) {
 //     code = code.toUpperCase();
