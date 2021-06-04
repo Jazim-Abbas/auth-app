@@ -44,7 +44,13 @@
                 </div>
                 <div class="pure-u-1" style="margin-top: 20px;">
                     <div class="grid-pad">
-                        <button type="button" class="pure-button pure-button-primary right" @click="onSendMail()">Send Mail</button>
+                        <div class="spinner" v-if="isLoading">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                          </div>
+                        
+                        <button v-if="!isLoading" type="button" class="pure-button pure-button-primary right" @click="onSendMail()">Send Mail</button>
+                        
                         <a href="/login.html">Back to Login</a>
                     </div>
                 </div>
