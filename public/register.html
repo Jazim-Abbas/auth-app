@@ -129,7 +129,13 @@
                 <div class="grid-pad">
                     <button class="pure-button" type="button" onclick="back()">Back</button>
                     <!-- <input type="submit" class="pure-button pure-button-primary right" value="Create Account" /> -->
-                    <button type="button" class="pure-button pure-button-primary right" @click="onRegister()">Create Account</button>
+                    
+                    <div class="spinner" v-if="isLoading">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                      </div>
+                    
+                    <button v-if="!isLoading" type="button" class="pure-button pure-button-primary right" @click="onRegister()">Create Account</button>
                 </div>
             </div>
 

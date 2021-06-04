@@ -17,6 +17,7 @@ var vm = new Vue({
   el: "#app",
   data: {
     pending: pendingRegistrations,
+    isLoading: false,
     credentials: {
       email: "",
     },
@@ -28,15 +29,20 @@ var vm = new Vue({
     async onSubmit() {
       const URL = "/health-official/register";
       const headers = { authorization: this.getUserToken() };
+      this.isLoading = true;
 
       try {
         const res = await axios.post(URL, { ...this.credentials }, { headers });
         this.errors = [];
         this.error = "";
 
+        this.isLoading = false;
+
         console.log(res);
       } catch (err) {
         const { response } = err;
+
+        this.isLoading = false;
 
         // if (response.status === 422) {
         //   this.error = "";
@@ -53,7 +59,6 @@ var vm = new Vue({
     },
     getUserToken() {
       const { token } = JSON.parse(localStorage.getItem("user"));
-      alert(token);
       return token;
     },
   },
