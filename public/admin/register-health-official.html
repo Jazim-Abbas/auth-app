@@ -36,7 +36,12 @@
 
                 <div class="pure-u-1">
                     <div class="grid-pad">
-                        <button class="pure-button pure-button-primary right" type="button" @click="onSubmit()">Send Registration Instructions</button>
+                        <div class="spinner" v-if="isLoading">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
+                          </div>
+
+                        <button v-if="!isLoading" class="pure-button pure-button-primary right" type="button" @click="onSubmit()">Send Registration Instructions</button>
                     </div>
                 </div>
             </form>

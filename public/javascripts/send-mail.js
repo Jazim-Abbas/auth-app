@@ -1,6 +1,7 @@
 var vm = new Vue({
   el: "#login-app",
   data: {
+    isLoading: false,
     acountType: "user",
     credentials: {
       email: "",
@@ -10,25 +11,30 @@ var vm = new Vue({
   },
   methods: {
     async onSendMail() {
-        try {
-          const res = await axios.post(this.sendMailUrl, { ...this.credentials });
-          this.errors = [];
+      this.isLoading = true;
+
+      try {
+        const res = await axios.post(this.sendMailUrl, { ...this.credentials });
+        this.errors = [];
+        this.error = "";
+
+        this.isLoading = false;
+
+        window.location.href = "/forget-password.html";
+      } catch (err) {
+        const { response } = err;
+
+        if (response.status === 422) {
           this.error = "";
-
-          window.location.href = "/forget-password.html"
-        } catch (err) {
-          const { response } = err;
-
-          if (response.status === 422) {
-            this.error = "";
-            this.errors = response.data;
-          } else {
-            this.errors = [];
-            this.error = response.data;
-          }
-
-          console.log(response);
+          this.errors = response.data;
+        } else {
+          this.errors = [];
+          this.error = response.data;
         }
+
+        console.log(response);
+        this.isLoading = false;
+      }
     },
   },
   computed: {

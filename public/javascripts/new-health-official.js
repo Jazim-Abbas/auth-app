@@ -1,14 +1,15 @@
 var vm = new Vue({
   el: "#app",
   data: {
+    isLoading: false,
     credentials: {
-      verificationCode: "291100",
-      name: "Adbul",
-      familyName: "Adbul",
-      phone: "1231",
-      newOfficialEmail: "abduliscoool@gmail.com",
-      password: "password",
-      confirmPassword: "password",
+      verificationCode: "",
+      name: "",
+      familyName: "",
+      phone: "",
+      newOfficialEmail: "",
+      password: "",
+      confirmPassword: "",
     },
     errors: [],
     error: "",
@@ -16,9 +17,12 @@ var vm = new Vue({
   methods: {
     async onSubmit() {
       const URL = "/health-official/verify-new-official";
+      this.isLoading = true;
 
       try {
         const res = await axios.post(URL, { ...this.credentials });
+
+        this.isLoading = false;
 
         console.log(res);
       } catch (err) {
@@ -35,6 +39,8 @@ var vm = new Vue({
           this.errors = [];
           this.error = response.data.message;
         }
+
+        this.isLoading = false;
 
         console.log(response);
       }
