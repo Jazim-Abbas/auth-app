@@ -17,9 +17,9 @@ var vm = new Vue({
 
       try {
         const res = await axios.post(this.loginURL, { ...this.credentials });
-        
+
         this.isLoading = false;
-        
+
         this.errors = [];
         this.error = "";
         let userData = res.data;
@@ -46,6 +46,18 @@ var vm = new Vue({
         console.log(response);
       }
     },
+    async onGoogleLogin() {
+      // alert(this.googleLoginURL);
+
+      try {
+        const res = await axios.get("/user/google");
+        console.log(res);
+      } catch (err) {
+        const { response } = err;
+
+        console.log(response);
+      }
+    },
   },
   computed: {
     loginURL() {
@@ -57,9 +69,25 @@ var vm = new Vue({
 
       return urls[this.acountType];
     },
+    googleLoginURL() {
+      const urls = {
+        owner: "/venue-owner/google",
+        user: "/user/google",
+        healthOfficial: "/health-official/google",
+      };
+
+      return urls[this.acountType];
+    },
   },
 });
 
 function validateLogin() {
   return true;
+}
+
+function onSignIn(googleUser) {
+  const user = googleUser.getBasicProfile();
+  console.log("user", user);
+  console.log("user email", user.ku);
+  // console.log("google user", JSON.stringify(googleUser.getBasicProfile()));
 }

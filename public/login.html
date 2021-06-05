@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google-signin-client_id" content="280929825494-ioteg88n8463bd02gflh1q90ot8fpo60.apps.googleusercontent.com" />
     <title>Login | COVID-19 Contact Tracing</title>
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
     <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -83,14 +85,14 @@
             <div class="separator full-width"><span>or</span></div>
 
               
-
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
             <p class="centre-text">Sign in with your social media account</p>
             <!-- Social login buttons -->
             <div class="centred flex-centre">
                 <button class="social-login twitter" type="button" title="Sign in with Twitter"><i class="fa fa-twitter"></i></button>
                 <button class="social-login facebook" type="button" title="Sign in with Facebook"><i class="fa fa-facebook"></i></button>
-                <button class="social-login google" type="button" title="Sign in with Google"><i class="fab fa-google"></i></button>
+                <button @click="onGoogleLogin()" class="social-login google" type="button" title="Sign in with Google"><i class="fab fa-google"></i></button>
             </div>
         </main>
     </div>
