@@ -84,14 +84,16 @@
 
             <div class="separator full-width"><span>or</span></div>
 
-            <div class="g-signin2" data-onsuccess="onSignIn" role="button"></div>
+            <!-- <div class="g-signin2" data-onsuccess="onSignIn" role="button"></div> -->
 
             <p class="centre-text">Sign in with your social media account</p>
             <!-- Social login buttons -->
             <div class="centred flex-centre">
-                <button class="social-login twitter" type="button" title="Sign in with Twitter"><i class="fa fa-twitter"></i></button>
+            <div class="g-signin2" data-onsuccess="onSignIn" role="button"></div>
+
+                <!-- <button class="social-login twitter" type="button" title="Sign in with Twitter"><i class="fa fa-twitter"></i></button>
                 <button class="social-login facebook" type="button" title="Sign in with Facebook"><i class="fa fa-facebook"></i></button>
-                <button @click="onGoogleLogin()" class="social-login google" type="button" title="Sign in with Google"><i class="fab fa-google"></i></button>
+                <button @click="onGoogleLogin()" class="social-login google" type="button" title="Sign in with Google"><i class="fab fa-google"></i></button> -->
             </div>
         </main>
     </div>
