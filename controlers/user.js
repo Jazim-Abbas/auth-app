@@ -3,7 +3,32 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv").config();
 const nodemailer = require('nodemailer');
-const { sendMail, code } = require("../middlewares/sendEmail")
+const { sendMail, code } = require("../middlewares/sendEmail");
+
+const getUser = (req, res) => {
+  models.User.findOne({where: {email: req.body.email}})
+  .then((result) => {
+    const token = jwt.sign(
+      {
+        name: result.name,
+        email: result.email,
+        userID: result.id,
+      },
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    res.json({
+      token: token,
+      name: result.name,
+      email: result.email,
+      userID: result.id,
+    });
+  })
+  .catch((err) => {
+    res.status(404).json({
+      message: `Not Found ${err}`
+    })
+  })
+}
 
 const googleLogin = async (req, res) => {
   const user = req.user._json
@@ -244,7 +269,8 @@ module.exports = {
   update: update,
   sendVerificationCode: sendVerificationCode,
   forgetPassword: forgetPassword,
-  googleLogin: googleLogin
+  googleLogin: googleLogin,
+  getUser: getUser
 };
 
 // const save = (req, res) => {
