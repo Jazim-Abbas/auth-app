@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": null,
+    "password": "mypass123",
     "database": "covid-19-check-in",
     "host": "127.0.0.1",
     "dialect": "mysql"

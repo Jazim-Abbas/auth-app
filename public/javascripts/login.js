@@ -47,12 +47,38 @@ var vm = new Vue({
       }
     },
     async onGoogleLogin(email) {
+      this.checkUser({ email }, "/user/get-user");
+    },
+    async checkUser(credentials, url) {
+      this.isLoading = true;
 
       try {
-        const res = await axios.post("/get/user", { email});
-        console.log(res);
+        const res = await axios.post(url, { ...credentials });
+
+        this.isLoading = false;
+
+        this.errors = [];
+        this.error = "";
+        let userData = res.data;
+        if (this.isOwner) {
+          userData.isOwner = true;
+        } else {
+          userData.isOwner = false;
+        }
+        window.localStorage.setItem("user", JSON.stringify(userData));
+        console.log(res.data);
+        window.location.href = "/user/account-details.html";
       } catch (err) {
+        this.isLoading = false;
         const { response } = err;
+
+        if (response.status === 422) {
+          this.error = "";
+          this.errors = response.data;
+        } else {
+          this.errors = [];
+          this.error = response.data.message;
+        }
 
         console.log(response);
       }
