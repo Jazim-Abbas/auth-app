@@ -6,7 +6,7 @@
     <meta name="google-signin-client_id" content="280929825494-ioteg88n8463bd02gflh1q90ot8fpo60.apps.googleusercontent.com" />
     <title>Login | COVID-19 Contact Tracing</title>
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css" crossorigin="anonymous">
-    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
     <script src="https://kit.fontawesome.com/675dd24524.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -84,8 +84,7 @@
 
             <div class="separator full-width"><span>or</span></div>
 
-              
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <div class="g-signin2" data-onsuccess="onSignIn" role="button"></div>
 
             <p class="centre-text">Sign in with your social media account</p>
             <!-- Social login buttons -->

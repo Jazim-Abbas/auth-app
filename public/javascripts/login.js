@@ -46,11 +46,10 @@ var vm = new Vue({
         console.log(response);
       }
     },
-    async onGoogleLogin() {
-      // alert(this.googleLoginURL);
+    async onGoogleLogin(email) {
 
       try {
-        const res = await axios.get("/user/google");
+        const res = await axios.post("/get/user", { email});
         console.log(res);
       } catch (err) {
         const { response } = err;
@@ -89,5 +88,7 @@ function onSignIn(googleUser) {
   const user = googleUser.getBasicProfile();
   console.log("user", user);
   console.log("user email", user.ku);
+
+  vm.onGoogleLogin(user.ku);
   // console.log("google user", JSON.stringify(googleUser.getBasicProfile()));
 }
