@@ -1,3 +1,4 @@
+
 function toggleNavMenu() {
   let navmenu = document.getElementsByTagName("nav")[0];
   if (navmenu.hidden == false) {
@@ -19,6 +20,7 @@ function hideNav(event) {
 }
 
 function signOut() {
+  
   document.cookie = "userType=;path=/";
   window.localStorage.removeItem("user");
   window.location.href = "/login.html";

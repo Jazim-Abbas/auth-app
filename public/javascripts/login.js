@@ -50,6 +50,7 @@ var vm = new Vue({
       this.checkUser({ email }, "/user/get-user");
     },
     async checkUser(credentials, url) {
+      this.signoutFromGoogle();
       this.isLoading = true;
 
       try {
@@ -82,6 +83,14 @@ var vm = new Vue({
 
         console.log(response);
       }
+    },
+    signoutFromGoogle() {
+      gapi.auth2
+        .getAuthInstance()
+        .signOut()
+        .then(() => {
+          console.log("sign out from google");
+        });
     },
   },
   computed: {
